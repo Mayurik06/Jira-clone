@@ -1,3 +1,4 @@
+'use client'
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { DottedSeparator } from "@/components/dotted-separator";
@@ -15,17 +16,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { registerSchema } from "../schemas";
+import { useRegister } from "../api/use-register";
 
-const formSchema=z.object({
-  name:z.string().trim().min(1,"Required"),
-  email:z.string().email(),
-  password:z.string().min(8,"Minimum 8 characters required"),
-})
 
 export const SignUpCard = () => {
+const {mutate}=useRegister();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerSchema >>({
+    resolver: zodResolver(registerSchema ),
     defaultValues: {
       name:"",
       email: "",
@@ -33,9 +32,8 @@ export const SignUpCard = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    "onsubmit";
-    console.log(values);
+  const onSubmit = (values: z.infer<typeof registerSchema >) => {
+   mutate(values)
   };
 
 
@@ -110,7 +108,7 @@ export const SignUpCard = () => {
               )}
             />
           <Button disabled={false} size="lg" className="w-full">
-            Login
+            Register
           </Button>
         </form>
         </Form>
